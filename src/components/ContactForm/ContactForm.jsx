@@ -8,12 +8,15 @@ const initialValues = {
   number: "",
 };
 
-export default function ContactForm() {
+export default function ContactForm({onAdd}) {
   const nameFieldId = useId();
   const numberFieldId = useId();
 
-  const handleSubmit = (values, actions) => {
-    console.log(values);
+  const handleSubmit = (values, actions) => {    
+    onAdd({
+        id: Date.now(),
+        ...values,
+    });
     actions.resetForm();
   };
 
@@ -34,21 +37,21 @@ export default function ContactForm() {
         <label htmlFor={nameFieldId}>Name</label>
         <Field
           className={css.field}
-          autoComplete="true"
+          autoComplete="on"
           type="text"
           name="name"
           id={nameFieldId}
         />
-          <ErrorMessage className={css.error} name="name" component="span" />
+          <ErrorMessage className={css.error} name="name" as="span" />
         <label htmlFor={numberFieldId}>Number</label>
         <Field
           className={css.field}
-          autoComplete="true"
+          autoComplete="on"
           type="text"
           name="number"
           id={numberFieldId}
         />
-          <ErrorMessage className={css.error} name="number" component="span" />
+          <ErrorMessage className={css.error} name="number" as="span" />
         <button className={css.button} type="submit">
           Add contact
         </button>
