@@ -8,14 +8,14 @@ const initialValues = {
   number: "",
 };
 
-export default function ContactForm({onAdd}) {
+export default function ContactForm({ onAdd }) {
   const nameFieldId = useId();
   const numberFieldId = useId();
 
-  const handleSubmit = (values, actions) => {    
+  const handleSubmit = (values, actions) => {
     onAdd({
-        id: Date.now(),
-        ...values,
+      id: Date.now(),
+      ...values,
     });
     actions.resetForm();
   };
@@ -24,17 +24,24 @@ export default function ContactForm({onAdd}) {
     name: Yup.string()
       .min(3, "Too Short!")
       .max(50, "Too Long!")
-      .required("Required"),
-      number: Yup.string()
-      .matches(/^[+\d]?[0-9\s\-()]{3,50}$/, "Number must be between 3 and 50 digits")
-      .required("Number is required"),
+      .required("Required input field"),
+    number: Yup.string()
+      .matches(
+        /^[+\d]?[0-9\s\-()]{3,50}$/,
+        "Number must be between 3 and 50 digits"
+      )
+      .required("Required input field"),
   });
- 
 
   return (
-    <Formik initialValues={ initialValues } onSubmit={handleSubmit} validationSchema={validationSchema}>
+    <Formik
+    className={css.formik}
+      initialValues={initialValues}
+      onSubmit={handleSubmit}
+      validationSchema={validationSchema}
+    >
       <Form className={css.form}>
-        <label htmlFor={nameFieldId}>Name</label>
+        <label className={css.formLabel} htmlFor={nameFieldId}>Name</label>
         <Field
           className={css.field}
           autoComplete="on"
@@ -42,8 +49,8 @@ export default function ContactForm({onAdd}) {
           name="name"
           id={nameFieldId}
         />
-          <ErrorMessage className={css.error} name="name" as="span" />
-        <label htmlFor={numberFieldId}>Number</label>
+        <ErrorMessage className={css.error} name="name" component="span" />
+        <label className={css.formLabel} htmlFor={numberFieldId}>Number</label>
         <Field
           className={css.field}
           autoComplete="on"
@@ -51,13 +58,11 @@ export default function ContactForm({onAdd}) {
           name="number"
           id={numberFieldId}
         />
-          <ErrorMessage className={css.error} name="number" as="span" />
-        <button className={css.button} type="submit">
+        <ErrorMessage className={css.error} name="number" component="span" />
+        <button className={css.buttonFormik} type="submit">
           Add contact
         </button>
       </Form>
     </Formik>
   );
 }
-
-
