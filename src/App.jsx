@@ -22,17 +22,16 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
-  }, [contacts]);
+   }, [contacts]); 
 
   const addContacts = (newContact) => {
-    setContacts((prevContacts) => {
-      return [...prevContacts, newContact];
-    });
-  };
+    setContacts((prevContacts) => [...prevContacts, newContact]);  
+    };
 
   const deleteContact = (contactId) => {
     setContacts((prevContacts) => {
-      return prevContacts.filter((contact) => contact.id !== contactId);
+      const updatedContacts = prevContacts.filter((contact) => contact.id !== contactId);
+      return updatedContacts.length > 0 ? updatedContacts : DEFAULT_CONTACTS;
     });
   };
 
