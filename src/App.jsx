@@ -15,10 +15,17 @@ const DEFAULT_CONTACTS = [
 function App() {
   const [contacts, setContacts] = useState(() => {
     const savedContacts = localStorage.getItem(STORAGE_KEY);
-    return savedContacts ? JSON.parse(savedContacts) : DEFAULT_CONTACTS;
+    if(savedContacts !== null) {
+      const parseContacts = JSON.parse(savedContacts);
+      if(parseContacts.length > 0) {
+        return parseContacts;
+      }
+    }
+    return DEFAULT_CONTACTS;
   });
 
   const [searchBox, setSearchBox] = useState("");
+  const handleChange = (newValue) => setSearchBox(newValue);
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(contacts));
@@ -29,10 +36,9 @@ function App() {
     };
 
   const deleteContact = (contactId) => {
-    setContacts((prevContacts) => {
-      const updatedContacts = prevContacts.filter((contact) => contact.id !== contactId);
-      return updatedContacts.length > 0 ? updatedContacts : DEFAULT_CONTACTS;
-    });
+    setContacts((prevContacts) => 
+     prevContacts.filter((contact) => contact.id !== contactId)
+    );
   };
 
   const searchUser = contacts.filter((contact) =>
@@ -44,7 +50,7 @@ function App() {
     <div>
       <h1>Phonebook</h1>
       <ContactForm onAdd={addContacts} />
-      <SearchBox value={searchBox} onSearch={setSearchBox} />
+      <SearchBox value={searchBox} onSearch={handleChange} />
       <ContactList contacts={searchUser} onDelete={deleteContact} />
     </div>
   );
